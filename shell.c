@@ -246,14 +246,14 @@ void executeInstruction(USER_DATA* data) {
             else
                 putsUart0("input was not hex\n");
         }
-        else if(stringsEqual(argumentOne, "pi")) {
-            if(stringsEqual(argumentTwo, "ON"))
-                pi(true);
-            else if (stringsEqual(argumentTwo, "OFF"))
-                pi(false);
-            else
-                putsUart0("Invalid command\n");
-        }
+//        else if(stringsEqual(argumentOne, "pi")) {
+//            if(stringsEqual(argumentTwo, "ON"))
+//                pi(true);
+//            else if (stringsEqual(argumentTwo, "OFF"))
+//                pi(false);
+//            else
+//                putsUart0("Invalid command\n");
+//        }
         else if(stringsEqual(argumentOne, "preempt")) {
             if(stringsEqual(argumentTwo, "ON"))
                 preempt(1);

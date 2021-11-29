@@ -82,7 +82,7 @@ void setUart0BaudRate(uint32_t baudRate, uint32_t fcyc)
 void putcUart0(char c)
 {
     while (UART0_FR_R & UART_FR_TXFF) {               // wait if uart0 tx fifo full
-        __asm(" SVC #2");                             // 2 = yield
+//        __asm(" SVC #2");                             // 2 = yield
     }
     UART0_DR_R = c;                                  // write character to fifo
 }

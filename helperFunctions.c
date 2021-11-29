@@ -22,6 +22,38 @@ uint8_t getSVCNumber(uint32_t *PSP) {
     uint8_t N = (uint8_t)(*svcCommand);
     return N;
 }
+void printState(uint8_t state) {
+    if(state == 0) {
+        putsUart0("INVALID");
+    } else if(state == 1) {
+        putsUart0("UNRUN");
+    } else if(state == 2) {
+        putsUart0("READY");
+    } else if(state == 3) {
+        putsUart0("DELAYED");
+    } else if(state == 4) {
+        putsUart0("BLOCKED");
+    } else {
+        putsUart0("SUSPENDED");
+    }
+}
+void printByteHex(uint8_t number) {
+    char hexadecimals[16] = "0123456789ABCDEF";
+    char printableHex[5];
+    printableHex[0] = '0';
+    printableHex[1] = 'x';
+    uint8_t i = 2;
+    uint8_t shifter = 4;
+    uint8_t ANDNum = 0xF0;
+    while(ANDNum != 0) {
+        uint8_t fourBits = ((number & ANDNum) >> shifter);
+        printableHex[i++] = hexadecimals[fourBits];
+        ANDNum = (ANDNum >> 4);
+        shifter -= 4;
+    }
+    printableHex[4] = '\0';
+    putsUart0(printableHex);
+}
 void printTwoBytesHex(uint16_t number) {
     char hexadecimals[16] = "0123456789ABCDEF";
     char printableHex[7];
@@ -143,7 +175,32 @@ bool stringsEqual(char *str1, char *str2) {
     }
     return true;
 }
-
+void printNumberPercentage(uint32_t num) {
+    char number[10];
+    int8_t i = 0;
+    while(num != 0) {
+        uint8_t n = num % 10;
+        num = num / 10;
+        if(i == 2) {
+            number[i] = '.';
+            i++;
+        }
+        number[i] = '0' + n;
+        i++;
+    }
+    while(i <= 3) {
+        if(i == 2) {
+            number[i] = '.';
+            i++;
+        }
+        number[i] = '0';
+        i++;
+    }
+    i--;
+    for(; i >= 0; i--) {
+        putcUart0(number[i]);
+    }
+}
 char* intToString(int num) {
     char temp[10];
     char s[10];
@@ -170,3 +227,12 @@ char* intToString(int num) {
     s[j] = '\0';
     return (char*)s;
 }
+void reStartTimer1() {
+    TIMER1_CTL_R &= ~TIMER_CTL_TAEN;
+    TIMER1_TAV_R = 0;
+    TIMER1_CTL_R |= TIMER_CTL_TAEN;
+}
+uint32_t getTime() {
+    return (uint32_t)TIMER1_TAV_R;
+}
+
