@@ -59,6 +59,11 @@ extern void svCallIsr();
 extern void pendSvIsr();
 extern void systickIsr();
 
+extern void busFaultIsr();
+extern void usageFaultIsr();
+extern void mpuFaultIsr();
+extern void hardFaultIsr();
+
 //*****************************************************************************
 //
 // The vector table.  Note that the proper constructs must be placed on this to
@@ -74,9 +79,9 @@ void (* const g_pfnVectors[])(void) =
     ResetISR,                               // The reset handler
     NmiSR,                                  // The NMI handler
     FaultISR,                               // The hard fault handler
-    IntDefaultHandler,                      // The MPU fault handler
-    IntDefaultHandler,                      // The bus fault handler
-    IntDefaultHandler,                      // The usage fault handler
+    mpuFaultIsr,                            // The MPU fault handler
+    busFaultIsr,                            // The bus fault handler
+    usageFaultIsr,                          // The usage fault handler
     0,                                      // Reserved
     0,                                      // Reserved
     0,                                      // Reserved
